@@ -1,4 +1,4 @@
-package com.example.myfirstapp_opsc7311
+package com.example.prog7313_starsucks
 
 import org.junit.Test
 

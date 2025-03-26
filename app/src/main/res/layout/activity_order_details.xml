@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".OrderDetailsActivity">
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header_layout"
+        app:menu="@menu/navigation_menu" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/nav_toolbar3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/starbucks_green"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="237dp"
+                android:layout_height="169dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/starsuckslogo" />
+
+            <TextView
+                android:id="@+id/txtPlacedOrder"
+                android:layout_width="251dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/hammersmith_one"
+                android:gravity="center_horizontal"
+                android:text="@string/you_ordered"
+                android:textColor="@color/starbucks_green"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="27dp" />
+
+            <ImageView
+                android:id="@+id/imgOrderedDrink"
+                android:layout_width="213dp"
+                android:layout_height="153dp"
+                android:layout_gravity="center_horizontal"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <EditText
+                android:id="@+id/edtName"
+                android:layout_width="258dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:hint="First Name"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/edtCell"
+                android:layout_width="256dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:hint="Cell"
+                android:inputType="number" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="29dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:clickable="true"
+                android:src="@drawable/small_heart" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

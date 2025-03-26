@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="starbucks_green">#00704A</color>
+    <color name="starbucks_red">#970202</color>
 </resources>
