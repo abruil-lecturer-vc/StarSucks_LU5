@@ -1,27 +1,24 @@
 package com.example.prog7313_starsucks
 
-class Order() {
-    /*
-        -- ORDER PROPERTIES --
-        Getters and setters are automatically created,
-        therefore methods do not need to be created
-     */
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+class Order(){/*
     lateinit var productName: String
     lateinit var customerName: String
     lateinit var customerCell: String
     lateinit var orderDate: String
 
     // secondary constructor
-    constructor(pName: String): this() {
+    constructor(pName: String) : this() {
         productName = pName
     }
 
-    // master constructor
-    constructor(pName: String, cName: String, cCell: String, oDate: String) : this(pName) {
+    // secondary constructor
+    constructor(pName: String, cName: String, cCell: String,
+                oDate: String) : this(pName) {
         customerName = cName
         customerCell = cCell
         orderDate = oDate
-    }
-
-
+    }*/
 }

@@ -9,53 +9,47 @@ import com.example.prog7313_starsucks.databinding.ActivityOrderDetailsBinding
 import com.google.android.material.navigation.NavigationView
 
 class OrderDetailsActivity: AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    var order = Order()
+   // var order = Order()
     private lateinit var binding: ActivityOrderDetailsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // using data binding to inflate the 'activity_order_details' screen
         binding = ActivityOrderDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val productName = intent.getStringExtra("order") ?: "Unknown"
+        binding.txtPlacedOrder.text = productName
+
+        val imageRes = when (productName) {
+            "Soy Latte" -> R.drawable.sb1
+            "Chocco Frapp" -> R.drawable.sb2
+            "Bottled Americano" -> R.drawable.sb3
+            "Rainbow Frapp" -> R.drawable.sb4
+            "Caramel Frapp" -> R.drawable.sb5
+            "Black Forest Frapp" -> R.drawable.sb6
+            else -> R.drawable.starsuckslogo
+        }
+
+        binding.imgOrderedDrink.setImageResource(imageRes)
+
+        binding.fab.setOnClickListener {
+            shareIntent(applicationContext, productName)
+        }
+
+        setupNavigation()
+    }
+
+    // Set up for navigation toolbar
+    private fun setupNavigation() {
         setSupportActionBar(binding.navToolbar3)
-
-        var toggleOnOff = ActionBarDrawerToggle(
-            this,
-            binding.drawerLayout3, binding.navToolbar3,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
+        val toggle = ActionBarDrawerToggle(
+            this, binding.drawerLayout3, binding.navToolbar3,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
-        binding.drawerLayout3.addDrawerListener(toggleOnOff)
-        toggleOnOff.syncState()
-
-        // bringToFront: bring a view to the front of the view hierarchy, making it
-        //visually appear on top of other views. This is to make sure that it is visible
-        // and not obscured by other views
+        binding.drawerLayout3.addDrawerListener(toggle)
+        toggle.syncState()
         binding.navView3.bringToFront()
-        // Setting the Item Selected Listener
         binding.navView3.setNavigationItemSelectedListener(this)
-
-        // get the name of the ordered product from the intent
-        order.productName = intent.getStringExtra("order").toString()
-
-        // set the product name on the text view
-        binding.txtPlacedOrder.text = order.productName
-
-        // changing image based on what the customer picked
-        when (order.productName) {
-            "Soy Latte" -> binding.imgOrderedDrink.setImageResource(R.drawable.sb1)
-            "Chocco Frapp" -> binding.imgOrderedDrink.setImageResource(R.drawable.sb2)
-            "Bottled Americano" -> binding.imgOrderedDrink.setImageResource(R.drawable.sb3)
-            "Rainbow Frapp" -> binding.imgOrderedDrink.setImageResource(R.drawable.sb4)
-            "Caramel Frapp" -> binding.imgOrderedDrink.setImageResource(R.drawable.sb5)
-            "Black Forest Frapp" -> binding.imgOrderedDrink.setImageResource(R.drawable.sb6)
-        }
-
-        binding.fab.setOnClickListener() {
-            shareIntent(this, order.productName)
-        }
-
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -67,7 +61,6 @@ class OrderDetailsActivity: AppCompatActivity(), NavigationView.OnNavigationItem
         }
 
         binding.drawerLayout3.closeDrawer(GravityCompat.START)
-
         return true
     }
 }

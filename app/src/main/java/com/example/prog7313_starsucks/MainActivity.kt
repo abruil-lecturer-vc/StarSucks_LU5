@@ -1,5 +1,6 @@
 package com.example.prog7313_starsucks
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -7,11 +8,18 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.prog7313_starsucks.databinding.ActivityMainWithNavDrawerBinding
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(), View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
-    var order = Order()
+    // var order = Order()
+    private lateinit var orderDAO: OrderDAO
+    private lateinit var db: AppDatabase
     private lateinit var binding: ActivityMainWithNavDrawerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,62 +29,87 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NavigationView.O
         setContentView(binding.root)
         setSupportActionBar(binding.navToolbar)
 
-        binding.imgSb1.setOnClickListener(this)
-        binding.imgSb2.setOnClickListener(this)
-        binding.imgSb3.setOnClickListener(this)
-        binding.imgSb4.setOnClickListener(this)
-        binding.imgSb5.setOnClickListener(this)
-        binding.imgSb6.setOnClickListener(this)
+        // Initialise the DB and DAO
+        db = AppDatabase.getDatabase(this) as AppDatabase
+        orderDAO = db.orderDAO()
 
+        setupListeners()
+        setupNavigation()
 
-        var toggleOnOff = ActionBarDrawerToggle(
-            this,
-            binding.drawerLayout, binding.navToolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        binding.drawerLayout.addDrawerListener(toggleOnOff)
-        toggleOnOff.syncState()
-
-        // bringToFront: bring a view to the front of the view hierarchy, making it
-        //visually appear on top of other views. This is to make sure that it is visible
-        // and not obscured by other views
-        binding.navView.bringToFront()
-        // Setting the Item Selected Listener
-        binding.navView.setNavigationItemSelectedListener(this)
-
+        initializeProducts() // Populate the database
     }
 
-    // The onClick method will override the onCreate method whenever a view
-    // has been clicked.
-    override fun onClick(v: View?) {
-
-        // Determine which view has been clicked based on ID
-        when (v?.id) {
-            R.id.img_sb1 -> order.productName = "Soy Latte"
-            R.id.img_sb2 -> order.productName = "Chocco Frapp"
-            R.id.img_sb3 -> order.productName = "Bottled Americano"
-            R.id.img_sb4 -> order.productName = "Rainbow Frapp"
-            R.id.img_sb5 -> order.productName = "Caramel Frapp"
-            R.id.img_sb6 -> order.productName = "Black Forest Frapp"
+    // Insert products into the Room database
+    private fun initializeProducts() {
+        lifecycleScope.launch {
+            if (orderDAO.getAllOrders().isEmpty()) {
+                orderDAO.insertAll(
+                    listOf(
+                        Product(name = "Soy Latte", price = 4.5),
+                        Product(name = "Chocco Frapp", price = 5.0),
+                        Product(name = "Bottled Americano", price = 3.5),
+                        Product(name = "Rainbow Frapp", price = 5.5),
+                        Product(name = "Caramel Frapp", price = 4.8),
+                        Product(name = "Black Forest Frapp", price = 6.0)
+                    )
+                )
+            }
         }
+    }
 
-        Toast.makeText(this, "MMM " + order.productName, Toast.LENGTH_SHORT).show()
-        openIntent(applicationContext, order.productName, OrderDetailsActivity::class.java)
+    // Set up listeners for drink clicks
+    private fun setupListeners() {
+        listOf(
+            Triple(binding.imgSb1, "Soy Latte", 4.5),
+            Triple(binding.imgSb2, "Chocco Frapp", 5.0),
+            Triple(binding.imgSb3, "Bottled Americano", 3.5),
+            Triple(binding.imgSb4, "Rainbow Frapp", 5.5),
+            Triple(binding.imgSb5, "Caramel Frapp", 4.8),
+            Triple(binding.imgSb6, "Black Forest Frapp", 6.0)
+        ).forEach { (view, name, price) ->
+            view.setOnClickListener { saveOrder(name, price) }
+        }
+    }
 
+    // Set up for navigation toolbar
+    private fun setupNavigation() {
+        val toggle = ActionBarDrawerToggle(
+            this, binding.drawerLayout, binding.navToolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        binding.navView.bringToFront()
+        binding.navView.setNavigationItemSelectedListener(this)
+    }
+
+    // product gets saved to database that user clicked
+    private fun saveOrder(name: String, price: Double) {
+        lifecycleScope.launch {
+            val product = Product(name = name, price = price)
+            orderDAO.insert(product)
+
+            Toast.makeText(this@MainActivity, "Ordered: $name", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this@MainActivity, OrderDetailsActivity::class.java)
+            intent.putExtra("order", name)
+            startActivity(intent)
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            //  Navigate to the photo activity
             R.id.nav_main -> openIntent(this, "", MainActivity::class.java)
             R.id.nav_photo -> openIntent(this, "", CoffeeSnapsActivity::class.java)
-            // R.id.nav_history -> openItent(this, "", ::class.java)
+            // R.id.nav_history -> openIntent(this, "", ::class.java)
         }
 
         binding.drawerLayout.closeDrawer(GravityCompat.START)
-
         return true
+    }
+
+    override fun onClick(v: View?) {
+        // TODO("Not yet implemented")
     }
 }
