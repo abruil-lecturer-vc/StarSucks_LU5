@@ -23,7 +23,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.prog7313_starsucks.databinding.ActivityCoffeeSnapsBinding
 import com.google.android.material.navigation.NavigationView
-import com.google.common.util.concurrent.ListenableFuture
+// import com.google.common.util.concurrent.ListenableFuture
 import java.io.File
 import java.lang.Exception
 import java.util.concurrent.ExecutorService
@@ -34,7 +34,7 @@ class CoffeeSnapsActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     private lateinit var binding: ActivityCoffeeSnapsBinding
     //  A ListenableFuture that will eventually provide a ProcessCameraProvider instance, which is
     //  used to control the camera's lifecycle and access its features
-    private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
+   // private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     // An object that selects which camera to use (front or back)
     private lateinit var cameraSelector: CameraSelector
     // An ImageCapture object for capturing still images from the camera
@@ -120,47 +120,47 @@ class CoffeeSnapsActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
     // Method to start the camera and capture image
     private fun startCamera() {
-        // cameraProviderFuture = ProcessCameraProvider.getInstance(this):
-        // Gets a ProcessCameraProvider (class that manages the camera
-        // subsystem) instance using the getInstance method,
-        // passing the current context (this). This is an asynchronous operation
-        cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-
-        //  Sets the cameraSelector to select the default back camera
-        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-        // Adds a listener to the cameraProviderFuture to be notified when the ProcessCameraProvider
-        // instance is ready. When the listener is triggered, it gets the cameraProvider from the
-        // future and sets up the camera preview and image capture.
-        cameraProviderFuture.addListener({
-
-            // .get() Waits if necessary for the computation to complete, and then retrieves its result
-            val cameraProvider = cameraProviderFuture.get()
-
-            // Creates a Preview use case for displaying the camera preview. It sets the surface
-            // provider to the SurfaceProvider of the imgCameraImage view from the binding
-            val preview = Preview.Builder().build().also{
-                it.setSurfaceProvider(binding.imgCameraImage.surfaceProvider)
-            }
-
-            // Creates an ImageCapture use case for capturing images
-            imageCapture = ImageCapture.Builder().build()
-            try {
-                //  Unbinds all use cases from the camera to ensure a clean start
-                cameraProvider.unbindAll()
-
-                // Binds the preview and imageCapture use cases to the camera lifecycle, using the
-                // cameraSelector. This ensures that the camera preview is displayed and
-                // image capture is possible
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
-            }
-            catch (e: Exception) {
-                // If any exceptions occur during use case binding, it logs a message indicating the
-                // failure (Use case binding failed)
-                Log.d("CoffeeSnapsActivity", "Use case binding failed")
-            }
-        }, //returns an Executor that runs tasks on the main thread
-            ContextCompat.getMainExecutor(this))
+//        // cameraProviderFuture = ProcessCameraProvider.getInstance(this):
+//        // Gets a ProcessCameraProvider (class that manages the camera
+//        // subsystem) instance using the getInstance method,
+//        // passing the current context (this). This is an asynchronous operation
+//        cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+//
+//        //  Sets the cameraSelector to select the default back camera
+//        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+//
+//        // Adds a listener to the cameraProviderFuture to be notified when the ProcessCameraProvider
+//        // instance is ready. When the listener is triggered, it gets the cameraProvider from the
+//        // future and sets up the camera preview and image capture.
+//        cameraProviderFuture.addListener({
+//
+//            // .get() Waits if necessary for the computation to complete, and then retrieves its result
+//            val cameraProvider = cameraProviderFuture.get()
+//
+//            // Creates a Preview use case for displaying the camera preview. It sets the surface
+//            // provider to the SurfaceProvider of the imgCameraImage view from the binding
+//            val preview = Preview.Builder().build().also{
+//                it.setSurfaceProvider(binding.imgCameraImage.surfaceProvider)
+//            }
+//
+//            // Creates an ImageCapture use case for capturing images
+//            imageCapture = ImageCapture.Builder().build()
+//            try {
+//                //  Unbinds all use cases from the camera to ensure a clean start
+//                cameraProvider.unbindAll()
+//
+//                // Binds the preview and imageCapture use cases to the camera lifecycle, using the
+//                // cameraSelector. This ensures that the camera preview is displayed and
+//                // image capture is possible
+//                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+//            }
+//            catch (e: Exception) {
+//                // If any exceptions occur during use case binding, it logs a message indicating the
+//                // failure (Use case binding failed)
+//                Log.d("CoffeeSnapsActivity", "Use case binding failed")
+//            }
+//        }, //returns an Executor that runs tasks on the main thread
+//            ContextCompat.getMainExecutor(this))
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

@@ -9,8 +9,10 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.prog7313_starsucks.Product
 import com.example.prog7313_starsucks.databinding.ActivityMainWithNavDrawerBinding
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NavigationView.O
     private lateinit var orderDAO: OrderDAO
     private lateinit var db: AppDatabase
     private lateinit var binding: ActivityMainWithNavDrawerBinding
+    private lateinit var database: FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +36,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NavigationView.O
         db = AppDatabase.getDatabase(this) as AppDatabase
         orderDAO = db.orderDAO()
 
+        // Setting up realtime db
+        database = FirebaseDatabase.getInstance()
+
         setupListeners()
         setupNavigation()
 
         initializeProducts() // Populate the database
     }
 
+
     // Insert products into the Room database
     private fun initializeProducts() {
+
         lifecycleScope.launch {
             if (orderDAO.getAllOrders().isEmpty()) {
                 orderDAO.insertAll(
@@ -91,9 +99,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NavigationView.O
 
             Toast.makeText(this@MainActivity, "Ordered: $name", Toast.LENGTH_SHORT).show()
 
+            saveOrderToFirebase(product)
+
             val intent = Intent(this@MainActivity, OrderDetailsActivity::class.java)
             intent.putExtra("order", name)
             startActivity(intent)
+        }
+    }
+
+    private fun saveOrderToFirebase(product: Product) {
+        // Grab reference to "orders" node in db
+        val ordersRef = database.getReference("orders")
+
+        // Get unique key for new order
+        val orderId = ordersRef.push().key
+
+        orderId?.let { id ->
+            ordersRef.child(id).setValue(product).addOnSuccessListener {
+                Toast.makeText(this, "Order saved to Firebase", Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to save order: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -110,6 +136,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, NavigationView.O
     }
 
     override fun onClick(v: View?) {
-        // TODO("Not yet implemented")
+        TODO("Not yet implemented")
     }
+
+
 }

@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.prog7313_starsucks.Product
+
 /*
     Interface class defines the method signatures for accessing the db
     Room automatically generates the implementation of OrderDAO when

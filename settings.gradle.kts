@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MyFirstApp_OPSC7311"
+rootProject.name = "PROG7313_StarSucks"
 include(":app")

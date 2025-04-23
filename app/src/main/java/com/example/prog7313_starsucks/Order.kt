@@ -3,7 +3,8 @@ package com.example.prog7313_starsucks
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-class Order(){/*
+class Order(){
+    /*
     lateinit var productName: String
     lateinit var customerName: String
     lateinit var customerCell: String
