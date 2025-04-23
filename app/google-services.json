@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "921027504071",
+    "project_id": "starsucks-prog7313",
+    "storage_bucket": "starsucks-prog7313.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921027504071:android:166e9416d0c085fa511be2",
+        "android_client_info": {
+          "package_name": "com.example.prog7313_starsucks"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgXHNh5W80l_XV9CP53CWVbTlkWw_RykQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
