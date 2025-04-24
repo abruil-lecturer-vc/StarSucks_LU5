@@ -38,7 +38,7 @@ android {
     }
 }
 
-// defining a read-only variable with CameraX libraries to version '1.1.0'
+// defining a read-only variable with CameraX libraries to version '1.4.2'
 val camerax_version = "1.4.2"
 
 dependencies {
